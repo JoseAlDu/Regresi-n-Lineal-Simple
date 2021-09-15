@@ -59,7 +59,7 @@ public class RegresionLinealSimple {
         System.out.print("Si desea calcular algun valor de y, proporcionando un valor de x, digite 0 y si no digite 1:");
         j = entrada.nextInt();
         if (j==0){
-            System.out.print("Digite la cantidad de datos x que decea calcualar:");
+            System.out.print("Digite la cantidad de datos x que desea calcualar:");
             cdatos = entrada.nextInt();
             extrasx = new double[ndatos];
             extrasy = new double[ndatos];
