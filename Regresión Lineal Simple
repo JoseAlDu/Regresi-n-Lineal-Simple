@@ -1,0 +1,90 @@
+import java.util.Scanner;
+public class RegresionLinealSimple {
+    private Scanner entrada;
+    private int ndatos, j, cdatos;
+    private double sx=0, sy=0, sx2=0, sxy=0, b0, b1;
+    private double[] x;
+    private double[] y;
+    private double[] xx2;
+    private double[] xy;
+    private double[] extrasx;
+    private double[] extrasy;
+
+    public void Datosxy(){
+        entrada = new Scanner (System.in);
+        System.out.println("\tRegresion Lineal Simple");
+        System.out.print("Digite la cantidad de datos:");
+        ndatos = entrada.nextInt();
+        x = new double[ndatos];
+        y = new double[ndatos];
+        xx2 = new double[ndatos];
+        xy = new double[ndatos];
+
+        System.out.println("Digite los " + ndatos + " datos de x: ");
+        for (int i = 0; i < ndatos; i++) {
+            x[i] = entrada.nextDouble();
+        }
+        System.out.println("Digite los " + ndatos + " datos de y: ");
+        for (int i = 0; i < ndatos; i++) {
+            y[i] = entrada.nextDouble();
+        }
+    }
+
+    public void Tablaxy(){
+        System.out.println("N | X    | Y ");
+        System.out.println("--|------|--------");
+        for (int i=1; i<ndatos; i++){
+            System.out.println((i+1)+" | "+x[i]+" | "+y[i]);
+        }
+    }
+
+    public void Calculob0b1(){
+        for (int i=0; i<ndatos; i++){
+            sx += x[i];
+            sy += y[i];
+            xx2[i] = x[i] * x[i];
+            xy[i] = x[i] * y[i];
+        }
+        for (int i=0; i<ndatos; i++){
+            sx2 += xx2[i];
+            sxy += xy[i];
+        }
+        b0 = (((sy*sx2)-(sx*sxy))/((ndatos*sx2)-(sx*sx)));
+        b1 = (((ndatos*sxy)-(sx*sy))/((ndatos*sx2)-(sx*sx)));
+        System.out.println("B0 = "+b0);
+        System.out.println("B1 = "+b1);
+    }
+
+    public void CalcularDatosXExtras(){
+        System.out.print("Si desea calcular algun valor de y, proporcionando un valor de x, digite 0 y si no digite 1:");
+        j = entrada.nextInt();
+        if (j==0){
+            System.out.print("Digite la cantidad de datos x que decea calcualar:");
+            cdatos = entrada.nextInt();
+            extrasx = new double[ndatos];
+            extrasy = new double[ndatos];
+            System.out.println("Digite los "+cdatos+" datos x:");
+            for (int i=0; i<cdatos; i++){
+                extrasx[i] = entrada.nextDouble();
+            }
+            for (int i=0; i<cdatos; i++){
+                extrasy[i] = extrasx[i]*b1+b0;
+            }
+            System.out.println("X    | Y");
+            System.out.println("-----|--------");
+            for (int i=0; i<cdatos; i++){
+                System.out.println(extrasx[i]+" | "+extrasy[i]);
+            }
+        }
+    }
+}
+
+public class Main extends RegresionLinealSimple {
+    public static void main (String[] args){
+        RegresionLinealSimple RLS = new RegresionLinealSimple();
+        RLS.Datosxy();
+        RLS.Tablaxy();
+        RLS.Calculob0b1();
+        RLS.CalcularDatosXExtras();
+    }
+}
