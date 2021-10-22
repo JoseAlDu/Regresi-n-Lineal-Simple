@@ -51,6 +51,7 @@ public class ARLSGD extends Agent{
                 b1r = (b1-(0.003*(0/(-23*x[i]))));
             }
 
+            System.out.println("El error es: "+error);
             System.out.println("B0: "+b0r);
             System.out.println("B1: "+b1r);
         }
