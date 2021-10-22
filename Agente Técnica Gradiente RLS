@@ -1,0 +1,62 @@
+package examples.behaviours;
+import jade.core.Agent;
+import jade.core.behaviours.OneShotBehaviour;
+public class ARLSGD extends Agent{
+    private double sx=0, sy=0, sx2=0, sxy=0, b0, b1, sg, sd, sr, error, b0r, b1r, g, d;
+    private double[] x = {23,26,30,34,43,48,52,57,58};
+    private double[] y = {651,762,856,1063,1190,1298,1421,1440,1518};
+    private double[] xx2 = new double[9];
+    private double[] xy = new double[9];
+    protected void setup(){
+        System.out.println("Regresion Lineal Simple");
+        addBehaviour(new MyOneShotBehaviour());
+    }
+
+    private class MyOneShotBehaviour extends OneShotBehaviour{
+        public void action (){
+            System.out.println("N | X    | Y ");
+            System.out.println("--|------|--------");
+            for(int i = 0; i<9;i++) {
+                System.out.println((i + 1) + " | " + x[i] + " | " + y[i]);
+            }
+
+            for (int i = 0; i < 9; i++) {
+                sx += x[i];
+                sy += y[i];
+                xx2[i] = x[i] * x[i];
+                xy[i] = x[i] * y[i];
+            }
+            for (int i = 0; i < 9; i++) {
+                sx2 += xx2[i];
+                sxy += xy[i];
+            }
+            b0 = (((sy * sx2) - (sx * sxy)) / ((9 * sx2) - (sx * sx)));
+            b1 = (((9 * sxy) - (sx * sy)) / ((9 * sx2) - (sx * sx)));
+            System.out.println("B0 = " + b0);
+            System.out.println("B1 = " + b1);
+
+            System.out.println("\nTecnica Gradiente");
+            for (int i = 0; i<9; i++){
+                sg += (y[i]-(b0+b1*x[i]));
+                sd += x[1]*(y[i]-(b0+b1*x[i]));
+                sr += (y[i]-(b0+b1*x[i]))*(y[i]-(b0+b1*x[i]));
+            }
+
+            g = ((-1*0.22)*sg);
+            d = ((-1*0.22)*sd);
+            error = (0.11*sr);
+
+            b0r = (b0-(0.003*(0/-1)));
+            for (int i = 0; i<9; i++){
+                b1r = (b1-(0.003*(0/(-23*x[i]))));
+            }
+
+            System.out.println("B0: "+b0r);
+            System.out.println("B1: "+b1r);
+        }
+        public int onEnd(){
+            myAgent.doDelete();
+            return super.onEnd();
+        }
+    }
+}
